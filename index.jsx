@@ -732,7 +732,7 @@ const DynamicModuleForm = ({ schema, setShowForm, companyId, user }) => {
         return <input type={type === 'phone' ? 'tel' : 'text'} value={formData[name] || ''} onChange={(e) => handleChange(name, e.target.value, type)} className={inputClass} required={required} placeholder={placeholder} />;
       case 'date':
       case 'datetime':
-        return <input type={type === 'datetime' ? 'datetime-local' : 'date'} value={formData[name] || ''} onChange={(e) => handleChange(name, e.targe.value, type)} className={inputClass} required={required} />;
+        return <input type={type === 'datetime' ? 'datetime-local' : 'date'} value={formData[name] || ''} onChange={(e) => handleChange(name, e.target.value, type)} className={inputClass} required={required} />;
       case 'number':
         return <input type="number" value={formData[name] || ''} onChange={(e) => handleChange(name, e.target.value, type)} className={inputClass} required={required} placeholder={placeholder} />;
       case 'currency':
@@ -818,6 +818,38 @@ const TemplateInstallerView = ({ companyId, currentUserRole }) => {
   const [isInstalling, setIsInstalling] = useState(false);
   const [error, setError] = useState(null);
   
+  // *** THIS IS THE NEW "SEED" BUTTON LOGIC ***
+  const [isSeeding, setIsSeeding] = useState(false);
+  const handleSeedTemplates = async () => {
+    if (currentUserRole !== 'super_admin') {
+      alert("Error: Only Super Admins can seed templates.");
+      return;
+    }
+    if (!window.confirm(`Are you sure you want to seed all ${TEMPLATES.length} hard-coded templates to the /platform_templates collection in your database? This is a one-time operation.`)) {
+      return;
+    }
+    
+    setIsSeeding(true);
+    setError(null);
+    try {
+      const batch = writeBatch(db);
+      const collectionRef = collection(db, 'platform_templates');
+      
+      TEMPLATES.forEach(template => {
+        const docRef = doc(collectionRef, template.id);
+        batch.set(docRef, template);
+      });
+      
+      await batch.commit();
+      alert("Success! All templates have been seeded to the /platform_templates collection. You can now update the app to Phase 2.");
+    } catch (err) {
+      console.error("Error seeding templates: ", err);
+      setError("Error seeding: " + err.message);
+    }
+    setIsSeeding(false);
+  };
+  
+  
   const handleInstall = async (template) => {
     if (currentUserRole !== 'super_admin') {
       alert("Error: Only Super Admins can install new module templates.");
@@ -883,6 +915,21 @@ const TemplateInstallerView = ({ companyId, currentUserRole }) => {
           </div>
         ))}
       </div>
+      
+      {/* --- NEW SEEDER BUTTON --- */}
+      {currentUserRole === 'super_admin' && (
+        <div className="mt-8 p-4 border-t border-dashed border-slate-300">
+          <h3 className="text-lg font-semibold text-slate-700">Developer Tools</h3>
+          <p className="text-sm text-slate-500 mb-3">This button will copy the 4 hard-coded templates from the app into the `/platform_templates` database collection. This is the first step for migrating to Phase 2.</p>
+          <button
+            onClick={handleSeedTemplates}
+            disabled={isSeeding}
+            className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium disabled:opacity-50"
+          >
+            {isSeeding ? 'Seeding Database...' : 'Run One-Time Template Seed'}
+          </button>
+        </div>
+      )}
       
       {isPreviewing && (
         <Modal title={`Preview: ${isPreviewing.name}`} setShowModal={() => setIsPreviewing(null)}>
@@ -1046,7 +1093,7 @@ const ModuleBuilderView = ({ companyId, currentUserRole, modules }) => {
             ) : <div />}
             <div className="flex items-end justify-between">
                <div className="flex items-center h-full ml-4">
-                  <input typeDype="checkbox" name="required" checked={field.required} onChange={(e) => handleFieldChange(index, e)} className="h-4 w-4 text-indigo-600 border-gray-300 rounded" />
+                  <input type="checkbox" name="required" checked={field.required} onChange={(e) => handleFieldChange(index, e)} className="h-4 w-4 text-indigo-600 border-gray-300 rounded" />
                   <label className="ml-2 block text-sm text-slate-700">Required</label>
                 </div>
               <button type="button" onClick={() => handleRemoveField(index)} className="text-slate-400 hover:text-red-600 p-1">
