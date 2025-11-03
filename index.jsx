@@ -49,111 +49,9 @@ try {
   alert("CRITICAL ERROR: Firebase config is not set. Please update the file with your own project's config.");
 }
 
-// --- Pre-defined Module Templates (This is what we are migrating) ---
-const TEMPLATES = [
-  {
-    id: 'accounting_pack',
-    name: 'Accounting Foundation Pack',
-    description: 'Installs the essential modules for double-entry accounting, including Ledgers, Vouchers, and Tax Slabs.',
-    modules: [
-      {
-        id: 'chart_of_accounts',
-        name: 'Chart of Accounts',
-        icon: 'Accounts',
-        fields: [
-          { name: 'Ledger Name', type: 'text', required: true },
-          { name: 'Group', type: 'dropdown', options: ['Assets', 'Liabilities', 'Income', 'Expense', 'Equity'], required: true },
-          { name: 'Opening Balance', type: 'currency', required: false, placeholder: 'e.g. 10000' },
-        ]
-      },
-      {
-        id: 'tax_slabs',
-        name: 'Tax Slabs',
-        icon: 'Expense',
-        fields: [
-          { name: 'Tax Name', type: 'text', required: true, placeholder: 'e.g., GST 18%' },
-          { name: 'Rate', type: 'number', required: true, placeholder: 'e.g., 18' },
-        ]
-      },
-      {
-        id: 'vouchers',
-        name: 'Vouchers (Journal)',
-        icon: 'Transactions',
-        fields: [
-          { name: 'Date', type: 'date', required: true },
-          { name: 'Voucher Type', type: 'dropdown', options: ['Sale', 'Purchase', 'Payment', 'Receipt', 'Contra', 'Journal'], required: true },
-          { name: 'Narration', type: 'text', required: false },
-        ]
-      }
-    ]
-  },
-  {
-    id: 'crm_pack',
-    name: 'Basic CRM Pack',
-    description: 'Installs modules for managing customer relationships, including Leads and Companies.',
-    modules: [
-       {
-        id: 'crm_leads',
-        name: 'CRM Leads',
-        icon: 'Sales',
-        fields: [
-          { name: 'Lead Name', type: 'text', required: true },
-          { name: 'Status', type: 'dropdown', options: ['New', 'Contacted', 'Qualified', 'Closed (Won)', 'Closed (Lost)'], required: true },
-          { name: 'Email', type: 'text', required: false },
-          { name: 'Phone', type: 'phone', required: false },
-        ]
-      },
-    ]
-  },
-  {
-    id: 'hr_pack',
-    name: 'Human Resources (HR) Pack',
-    description: 'Installs modules for managing employees and tracking attendance.',
-    modules: [
-       {
-        id: 'hr_employees',
-        name: 'Employees',
-        icon: 'Admin', // Using 'Admin' icon as a placeholder for 'people'
-        fields: [
-          { name: 'Full Name', type: 'text', required: true },
-          { name: 'Employee ID', type: 'text', required: true },
-          { name: 'Designation', type: 'text', required: true },
-          { name: 'Joining Date', type: 'date', required: true },
-          { name: 'Phone', type: 'phone', required: false },
-        ]
-      },
-       {
-        id: 'hr_attendance',
-        name: 'Attendance',
-        icon: 'Transactions', // Using 'Transactions' as placeholder for 'clock'
-        fields: [
-          { name: 'Employee ID', type: 'text', required: true },
-          { name: 'Check-In Time', type: 'datetime', required: true },
-          { name: 'Check-Out Time', type: 'datetime', required: false },
-          { name: 'Location (GPS)', type: 'text', required: false, placeholder: 'e.g. 19.076, 72.877' },
-        ]
-      },
-    ]
-  },
-  {
-    id: 'logistics_pack',
-    name: 'Logistics Pack',
-    description: 'Installs a module for tracking shipments and deliveries.',
-    modules: [
-       {
-        id: 'logistics_shipments',
-        name: 'Shipments',
-        icon: 'Logistics',
-        fields: [
-          { name: 'AWB Number', type: 'text', required: true },
-          { name: 'Customer Name', type: 'text', required: true },
-          { name: 'Status', type: 'dropdown', options: ['Pending', 'In Transit', 'Out for Delivery', 'Delivered', 'Cancelled'], required: true },
-          { name: 'Location', type: 'text', required: false },
-        ]
-      },
-    ]
-  }
-];
+// --- Pre-defined Module Templates ---
+// THIS IS NOW EMPTY! We will fetch from the database.
+// const TEMPLATES = [...]; // This is now gone
 
 
 // --- Helper Components & Functions ---
@@ -1160,7 +1058,7 @@ const UserManagementView = ({ companyId, currentUserRole }) => {
             {loadingUsers ? <tr><td colSpan="2" className="p-4 text-center text-slate-500">Loading users...</td></tr> : users.map(user => (
               <tr key={user.id}>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">{user.email}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm">
+                <td className="px-6 py-4 whitespace-nowTsp text-sm">
                   <select
                     value={user.role}
                     onChange={(e) => handleRoleChange(user.id, e.target.value)}
