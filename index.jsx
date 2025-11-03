@@ -50,7 +50,6 @@ try {
 }
 
 // --- Pre-defined Module Templates ---
-// This is the "Accounting Pack" we will install from the UI
 const TEMPLATES = [
   {
     id: 'accounting_pack',
@@ -64,7 +63,7 @@ const TEMPLATES = [
         fields: [
           { name: 'Ledger Name', type: 'text', required: true },
           { name: 'Group', type: 'dropdown', options: ['Assets', 'Liabilities', 'Income', 'Expense', 'Equity'], required: true },
-          { name: 'Opening Balance', type: 'currency', required: false },
+          { name: 'Opening Balance', type: 'currency', required: false, placeholder: 'e.g. 10000' },
         ]
       },
       {
@@ -105,6 +104,54 @@ const TEMPLATES = [
         ]
       },
     ]
+  },
+  {
+    id: 'hr_pack',
+    name: 'Human Resources (HR) Pack',
+    description: 'Installs modules for managing employees and tracking attendance.',
+    modules: [
+       {
+        id: 'hr_employees',
+        name: 'Employees',
+        icon: 'Admin', // Using 'Admin' icon as a placeholder for 'people'
+        fields: [
+          { name: 'Full Name', type: 'text', required: true },
+          { name: 'Employee ID', type: 'text', required: true },
+          { name: 'Designation', type: 'text', required: true },
+          { name: 'Joining Date', type: 'date', required: true },
+          { name: 'Phone', type: 'phone', required: false },
+        ]
+      },
+       {
+        id: 'hr_attendance',
+        name: 'Attendance',
+        icon: 'Transactions', // Using 'Transactions' as placeholder for 'clock'
+        fields: [
+          { name: 'Employee ID', type: 'text', required: true },
+          { name: 'Check-In Time', type: 'datetime', required: true },
+          { name: 'Check-Out Time', type: 'datetime', required: false },
+          { name: 'Location (GPS)', type: 'text', required: false, placeholder: 'e.g. 19.076, 72.877' },
+        ]
+      },
+    ]
+  },
+  {
+    id: 'logistics_pack',
+    name: 'Logistics Pack',
+    description: 'Installs a module for tracking shipments and deliveries.',
+    modules: [
+       {
+        id: 'logistics_shipments',
+        name: 'Shipments',
+        icon: 'Logistics',
+        fields: [
+          { name: 'AWB Number', type: 'text', required: true },
+          { name: 'Customer Name', type: 'text', required: true },
+          { name: 'Status', type: 'dropdown', options: ['Pending', 'In Transit', 'Out for Delivery', 'Delivered', 'Cancelled'], required: true },
+          { name: 'Location', type: 'text', required: false },
+        ]
+      },
+    ]
   }
 ];
 
@@ -121,7 +168,7 @@ const getIcon = (name) => {
     Trash: 'M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12.577 0c-.295.009-.59.026-.88.05c-.29.024-.58.052-.87.083m-1.577 0a48.11 48.11 0 013.478-.397m7.5 0a48.667 48.667 0 00-7.5 0',
     Recover: 'M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3',
     Module: 'M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.125 1.125 0 010 2.25H5.625a1.125 1.125 0 010-2.25z',
-    Sales: 'M2.25 18.75a60.07 60.07 0 0115.798-1.55.657.657 0 01.554.554 60.07 60.07 0 01-1.55 15.798.657.657 0 01-.554.554A60.07 60.07 0 012.25 18.75zM16.04 4.937a8.25 8.25 0 010 11.668M18.75 3.187a12 12 0 010 17.626M13.5 7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75v3a.75.75 0 01-.75.75h-3a.75.75 0 01-.75-.75v-3z',
+    Sales: 'M2.25 18.75a60.07 60.07 0 0115.798-1.55.657.657 0 01.554.554 60.07 60.07 0 01-1.55 15.798.657.657 0 01-.554.554A60.07 60.07 0 012.25 18.75zM16.04 4.937a8.25 8.25 0 010 11.668M18.75 3.187a12 12 0 010 17.626M13.5 7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75v3a.75.75 0 01-.75-.75h-3a.75.75 0 01-.75-.75v-3z',
     Purchase: 'M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0011.667 0l3.182-3.182m-4.991-1.343a4.125 4.125 0 01-1.12 3.5m-3.111-3.5a4.125 4.125 0 00-1.12 3.5m0 0l-1.48 1.48m1.48-1.48l1.48 1.48m-1.48-1.48l-1.48-1.48m1.48 1.48l1.48-1.48m6.456-3.545a4.125 4.125 0 01-1.12 3.5m-3.111-3.5a4.125 4.125 0 00-1.12 3.5m0 0l-1.48 1.48m1.48-1.48l1.48 1.48m-1.48-1.48l-1.48-1.48m1.48 1.48l1.48-1.48',
     Store: 'M3.75 5.25a1.5 1.5 0 013 0v.516a.75.75 0 00.75.75h10.5a.75.75 0 00.75-.75V5.25a1.5 1.5 0 013 0v.516a2.25 2.25 0 01-2.25 2.25H15a2.25 2.25 0 01-2.25-2.25V5.25a.75.75 0 00-.75-.75H9a.75.75 0 00-.75.75v.516A2.25 2.25 0 016 8.016H3.75V5.25zM12 18.75A3 3 0 0015 15.75v-1.5a3 3 0 00-3-3V18.75zM12 18.75a3 3 0 013 3V21h-3v-2.25zM12 11.25a3 3 0 00-3 3v1.5a3 3 0 003 3V11.25zM12 11.25a3 3 0 01-3-3V6h3v2.25A2.25 2.25 0 019.75 10.5H6a3.75 3.75 0 00-3.75 3.75v1.5a3.75 3.75 0 003.75 3.75H9a2.25 2.25 0 012.25-2.25V11.25z',
     Accounts: 'M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h6m3-3.75l3 3m0 0l3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z',
@@ -159,7 +206,7 @@ const formatDate = (timestamp) => {
 
 // --- Reusable Components ---
 const LoadingScreen = () => (
-  <div className="flex items-center justify-center h-screen bg-gray-900 text-white">
+  <div className="flex items-center justify-center h-screen bg-slate-900 text-white">
     <div className="flex flex-col items-center">
       <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-indigo-500"></div>
       <p className="mt-4 text-xl font-semibold">Loading Business Platform...</p>
@@ -504,7 +551,7 @@ const SidebarButton = ({ name, icon, activeView, onClick }) => (
   <button
     onClick={onClick}
     className={`w-full flex items-center space-x-3 p-4 text-left transition-all duration-200 text-sm font-medium ${
-      activeView === name || activeView === icon // Handle module ID match
+      activeView === name || activeView === icon || activeView === name.toLowerCase().replace(' ', '_') || activeView === name.toLowerCase()
         ? 'bg-indigo-700 text-white shadow-inner-lg'
         : 'text-slate-300 hover:bg-slate-700 hover:text-white'
     }`}
@@ -683,7 +730,8 @@ const DynamicModuleForm = ({ schema, setShowForm, companyId, user }) => {
       case 'phone':
         return <input type={type === 'phone' ? 'tel' : 'text'} value={formData[name] || ''} onChange={(e) => handleChange(name, e.target.value, type)} className={inputClass} required={required} placeholder={placeholder} />;
       case 'date':
-        return <input type="date" value={formData[name] || ''} onChange={(e) => handleChange(name, e.target.value, type)} className={inputClass} required={required} />;
+      case 'datetime':
+        return <input type={type === 'datetime' ? 'datetime-local' : 'date'} value={formData[name] || ''} onChange={(e) => handleChange(name, e.target.value, type)} className={inputClass} required={required} />;
       case 'number':
         return <input type="number" value={formData[name] || ''} onChange={(e) => handleChange(name, e.target.value, type)} className={inputClass} required={required} placeholder={placeholder} />;
       case 'currency':
@@ -733,24 +781,26 @@ const AdminView = ({ companyId, currentUserRole, modules }) => {
     <div className="space-y-8 animate-fadeIn">
       {/* Admin Tabs */}
       <div className="flex border-b border-slate-300">
-        <AdminTab name="Install Templates" activeTab={activeTab} onClick={() => setActiveTab('templates')} />
-        <AdminTab name="Module Builder" activeTab={activeTab} onClick={() => setActiveTab('builder')} />
-        <AdminTab name="User Management" activeTab={activeTab} onClick={() => setActiveTab('users')} />
+        <AdminTab name="Install Templates" id="templates" activeTab={activeTab} onClick={() => setActiveTab('templates')} />
+        <AdminTab name="Module Builder" id="builder" activeTab={activeTab} onClick={() => setActiveTab('builder')} />
+        <AdminTab name="User Management" id="users" activeTab={activeTab} onClick={() => setActiveTab('users')} />
       </div>
 
       {/* Render Active Tab Content */}
-      {activeTab === 'templates' && <TemplateInstallerView companyId={companyId} currentUserRole={currentUserRole} />}
-      {activeTab === 'builder' && <ModuleBuilderView companyId={companyId} currentUserRole={currentUserRole} modules={modules} />}
-      {activeTab === 'users' && <UserManagementView companyId={companyId} currentUserRole={currentUserRole} />}
+      <div className="animate-fadeIn">
+        {activeTab === 'templates' && <TemplateInstallerView companyId={companyId} currentUserRole={currentUserRole} />}
+        {activeTab === 'builder' && <ModuleBuilderView companyId={companyId} currentUserRole={currentUserRole} modules={modules} />}
+        {activeTab === 'users' && <UserManagementView companyId={companyId} currentUserRole={currentUserRole} />}
+      </div>
     </div>
   );
 };
 
-const AdminTab = ({ name, activeTab, onClick }) => (
+const AdminTab = ({ name, id, activeTab, onClick }) => (
   <button
     onClick={onClick}
     className={`py-3 px-6 font-medium text-sm transition-colors
-      ${activeTab === name.toLowerCase().split(' ')[0]
+      ${activeTab === id
         ? 'border-b-2 border-indigo-600 text-indigo-600'
         : 'text-slate-500 hover:text-slate-800'
       }
@@ -809,12 +859,12 @@ const TemplateInstallerView = ({ companyId, currentUserRole }) => {
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {TEMPLATES.map(template => (
-          <div key={template.id} className="border border-slate-200 rounded-lg shadow-md flex flex-col">
+          <div key={template.id} className="border border-slate-200 rounded-lg shadow-md flex flex-col bg-slate-50">
             <div className="p-5">
               <h3 className="text-xl font-bold text-indigo-700">{template.name}</h3>
               <p className="text-slate-600 mt-2 text-sm">{template.description}</p>
             </div>
-            <div className="bg-slate-50 p-4 mt-auto flex justify-end space-x-3 border-t border-slate-200">
+            <div className="bg-white p-4 mt-auto flex justify-end space-x-3 border-t border-slate-200">
               <button 
                 onClick={() => setIsPreviewing(template)}
                 className="px-4 py-2 bg-slate-200 text-slate-800 rounded-lg hover:bg-slate-300 transition-colors text-sm font-medium"
@@ -839,7 +889,7 @@ const TemplateInstallerView = ({ companyId, currentUserRole }) => {
           <h4 className="text-lg font-semibold text-slate-800 mb-2">Modules to be installed:</h4>
           <div className="space-y-3">
             {isPreviewing.modules.map(module => (
-              <div key={module.id} className="p-3 border border-slate-200 rounded-lg">
+              <div key={module.id} className="p-3 border border-slate-200 rounded-lg bg-slate-50">
                 <h5 className="font-bold text-indigo-700">{module.name} (ID: <span className="font-mono text-sm">{module.id}</span>)</h5>
                 <p className="text-sm text-slate-600">Fields:</p>
                 <ul className="list-disc list-inside text-sm text-slate-500 pl-4">
@@ -920,7 +970,7 @@ const ModuleBuilderView = ({ companyId, currentUserRole, modules }) => {
       alert(`Module "${newModuleName}" created successfully!`);
     } catch (err) {
       console.error("Error creating module: ", err);
-      alert("Error: ".red(err.message));
+      alert("Error: " + err.message);
     }
   };
   
@@ -931,7 +981,7 @@ const ModuleBuilderView = ({ companyId, currentUserRole, modules }) => {
       <div className="bg-white p-6 rounded-lg shadow-lg border border-slate-200">
         <h2 className="text-2xl font-bold mb-4 text-slate-800">Module Builder</h2>
         <p className="text-red-600">Only Super Admins can create or edit new modules.</p>
-        <h3 className="text-lg font-medium mt-6">Current Modules</h3>
+        <h3 className="text-lg font-medium mt-6 text-slate-700">Current Modules</h3>
         <ul className="list-disc list-inside text-slate-600">
           {modules.map(m => <li key={m.id}>{m.name} (<span className="font-mono text-sm">{m.id}</span>)</li>)}
         </ul>
@@ -982,6 +1032,7 @@ const ModuleBuilderView = ({ companyId, currentUserRole, modules }) => {
                 <option value="number">Number</option>
                 <option value="currency">Currency (INR)</option>
                 <option value="date">Date</option>
+                <option value="datetime">Date & Time</option>
                 <option value="phone">Phone</option>
                 <option value="dropdown">Dropdown</option>
               </select>
