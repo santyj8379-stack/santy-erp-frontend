@@ -49,7 +49,7 @@ try {
   alert("CRITICAL ERROR: Firebase config is not set. Please update the file with your own project's config.");
 }
 
-// --- Pre-defined Module Templates ---
+// --- Pre-defined Module Templates (This is what we are migrating) ---
 const TEMPLATES = [
   {
     id: 'accounting_pack',
@@ -175,6 +175,7 @@ const getIcon = (name) => {
     Expense: 'M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0l.879-.659M12 21.75V19.5M12 6V4.5M3 15V4.5M3 15h9M3 15C3 16.51 4.444 18 6.182 18h9.636C17.556 18 19.5 16.51 19.5 15M12 6V3M16.5 4.5V15m3 0V4.5M16.5 15h3M16.5 15c0 1.51 1.444 3 3.182 3h.636C21.556 18 21 16.51 21 15',
     Export: 'M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5',
     Logistics: 'M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.125-.504 1.125-1.125V14.25m-17.25 4.5h10.5m-10.5-4.5V6.375c0-.621.504-1.125 1.125-1.125h14.25c.621 0 1.125.504 1.125 1.125v7.875m-16.5-4.5h16.5',
+    Seed: 'M6.75 7.5l3 2.25-3 2.25m3 0l3 2.25-3 2.25m3 0l3 2.25-3 2.25M6.75 21v-5.25a2.25 2.25 0 012.25-2.25h1.5a2.25 2.25 0 012.25 2.25V21m-5.25 0h5.25m-12-1.5a2.25 2.25 0 012.25-2.25h1.5a2.25 2.25 0 012.25 2.25V21m-5.25 0h5.25m-12-1.5a2.25 2.25 0 012.25-2.25h1.5a2.25 2.25 0 012.25 2.25V21m-5.25 0h5.25M6 3.75l3 2.25-3 2.25m3 0l3 2.25-3 2.25m3 0l3 2.25-3 2.25M6 18v-5.25a2.25 2.25 0 012.25-2.25h1.5a2.25 2.25 0 012.25 2.25V18m-5.25 0h5.25'
   };
   const path = icons[name] || icons.Module; // Default to 'Module' icon
   return (
@@ -731,7 +732,7 @@ const DynamicModuleForm = ({ schema, setShowForm, companyId, user }) => {
         return <input type={type === 'phone' ? 'tel' : 'text'} value={formData[name] || ''} onChange={(e) => handleChange(name, e.target.value, type)} className={inputClass} required={required} placeholder={placeholder} />;
       case 'date':
       case 'datetime':
-        return <input type={type === 'datetime' ? 'datetime-local' : 'date'} value={formData[name] || ''} onChange={(e) => handleChange(name, e.target.value, type)} className={inputClass} required={required} />;
+        return <input type={type === 'datetime' ? 'datetime-local' : 'date'} value={formData[name] || ''} onChange={(e) => handleChange(name, e.targe.value, type)} className={inputClass} required={required} />;
       case 'number':
         return <input type="number" value={formData[name] || ''} onChange={(e) => handleChange(name, e.target.value, type)} className={inputClass} required={required} placeholder={placeholder} />;
       case 'currency':
@@ -1045,7 +1046,7 @@ const ModuleBuilderView = ({ companyId, currentUserRole, modules }) => {
             ) : <div />}
             <div className="flex items-end justify-between">
                <div className="flex items-center h-full ml-4">
-                  <input type="checkbox" name="required" checked={field.required} onChange={(e) => handleFieldChange(index, e)} className="h-4 w-4 text-indigo-600 border-gray-300 rounded" />
+                  <input typeDype="checkbox" name="required" checked={field.required} onChange={(e) => handleFieldChange(index, e)} className="h-4 w-4 text-indigo-600 border-gray-300 rounded" />
                   <label className="ml-2 block text-sm text-slate-700">Required</label>
                 </div>
               <button type="button" onClick={() => handleRemoveField(index)} className="text-slate-400 hover:text-red-600 p-1">
