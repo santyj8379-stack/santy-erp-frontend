@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ledger Statement</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h5 class="text-muted">Ledger Statement for:</h5>
+            <h1 class="text-primary">{{ ledger.name }}</h1>
+        </div>
+        <a href="{% url 'trial_balance' %}" class="btn btn-secondary">Back to Trial Balance</a>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Date</th>
+                        <td class="fw-bold">
+    <a href="{% url 'voucher_detail' row.id %}" class="text-decoration-none">
+        {{ row.voucher_no }}
+    </a>
+</td>
+                        <th>Type</th>
+                        <th>Narration</th>
+                        <th class="text-end">Debit</th>
+                        <th class="text-end">Credit</th>
+                        <th class="text-end">Balance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in entries %}
+                    <tr>
+                        <td>{{ row.date|date:"d-M-Y" }}</td>
+                        <td class="fw-bold">{{ row.voucher_no }}</td>
+                        <td><span class="badge bg-info text-dark">{{ row.voucher_type }}</span></td>
+                        <td class="text-muted small">{{ row.narration }}</td>
+                        
+                        <td class="text-end text-success">
+                            {% if row.debit > 0 %}
+                                {{ row.debit|floatformat:2 }}
+                            {% endif %}
+                        </td>
+
+                        <td class="text-end text-danger">
+                            {% if row.credit > 0 %}
+                                {{ row.credit|floatformat:2 }}
+                            {% endif %}
+                        </td>
+
+                        <td class="text-end fw-bold">{{ row.balance|floatformat:2 }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center">No transactions found for this ledger.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot class="table-light">
+                    <tr>
+                        <td colspan="6" class="text-end fw-bold">Closing Balance:</td>
+                        <td class="text-end fw-bold fs-5">{{ closing_balance|floatformat:2 }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,90 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Import Wizard - Step 2{% endblock %}
+
+{% block content %}
+    <h2>Smart Import Wizard - Step 2: Map Columns</h2>
+    <p>Match your file's columns to our database fields.</p>
+
+    <form method="post" action="{% url 'process_excel_import' %}">
+        {% csrf_token %}
+        
+        <table style="border-collapse: collapse; margin-top: 1em;" id="mapping-table">
+            <thead>
+                <tr style="background-color: #f4f4f4; text-align: left;">
+                    <th style="border: 1px solid #ccc; padding: 0.5em;">Our Database Field</th>
+                    <th style="border: 1px solid #ccc; padding: 0.5em;">Your File's Column</th>
+                </tr>
+            </thead>
+            
+            <tbody id="table-body">
+                {% for field in model_fields %}
+                <tr>
+                    <td style="border: 1px solid #ccc; padding: 0.5em;">{{ field }}</td>
+                    <td style="border: 1px solid #ccc; padding: 0.5em;">
+                        <select name="{{ field }}">
+                            <option value="">-- Ignore this field --</option>
+                            {% for header in file_headers %}
+                                <option value="{{ header }}" 
+                                    {% if header == field %}selected{% endif %}>
+                                    {{ header }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <button type="button" id="add-custom-field" style="margin-top: 1em;">
+            [ + Add Custom Field ]
+        </button>
+        
+        <br><br>
+        <button type="submit">Next: Review & Import</button>
+    </form>
+
+    <script>
+        // 1. Get a reference to the button and the table body
+        const addButton = document.getElementById('add-custom-field');
+        const tableBody = document.getElementById('table-body');
+        
+        // 2. Create a template for the dropdown options
+        // We get the headers from Django's template language
+        const fileHeaders = [
+            {% for header in file_headers %}
+                "{{ header }}",
+            {% endfor %}
+        ];
+        
+        let dropdownOptions = '<option value="">-- Ignore --</option>';
+        fileHeaders.forEach(header => {
+            dropdownOptions += `<option value="${header}">${header}</option>`;
+        });
+
+        // 3. Listen for a click on the button
+        addButton.addEventListener('click', () => {
+            // 4. Create a new table row
+            const newRow = document.createElement('tr');
+            
+            // 5. Create the two cells for the row
+            const keyCell = document.createElement('td');
+            keyCell.style = "border: 1px solid #ccc; padding: 0.5em;";
+            // This is the input box for the custom field name
+            // Note the name: "custom_field_key"
+            keyCell.innerHTML = '<input type="text" name="custom_field_key" placeholder="Enter Field Name (e.g., Salesperson)" style="width: 200px;">';
+            
+            const valueCell = document.createElement('td');
+            valueCell.style = "border: 1px solid #ccc; padding: 0.5em;";
+            // This is the dropdown to select the column
+            // Note the name: "custom_field_value"
+            valueCell.innerHTML = `<select name="custom_field_value">${dropdownOptions}</select>`;
+            
+            // 6. Add the cells to the row, and the row to the table
+            newRow.appendChild(keyCell);
+            newRow.appendChild(valueCell);
+            tableBody.appendChild(newRow);
+        });
+    </script>
+{% endblock %}

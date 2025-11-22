@@ -1,0 +1,27 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Smart Import Wizard - Step 1{% endblock %}
+
+{% block content %}
+    <h2>Smart Import Wizard - Step 1</h2>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <p>
+            <label for="id_file">Upload your Excel or CSV file:</label><br>
+            <input type="file" name="excel_file" id="id_file">
+        </p>
+        
+        <p>
+            <label for="id_model_type">What kind of data are you importing?</label><br>
+            <select name="model_type" id="id_model_type">
+                <option value="ledgers">Ledgers (Customers, Suppliers, etc.)</option>
+                <option value="items">Stock Items (Products)</option>
+                <option value="vouchers">Transactions (Vouchers)</option>
+            </select>
+        </p>
+        
+        <button type="submit">Next: Map Columns</button>
+    </form>
+{% endblock %}

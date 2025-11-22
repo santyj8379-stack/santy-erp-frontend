@@ -1,0 +1,15 @@
+# Ignore Virtual Env
+venv/
+env/
+
+# Ignore Database (We usually don't upload the local DB to git)
+db.sqlite3
+
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore IDE settings
+.vscode/
+.idea/
+.vscode-server/

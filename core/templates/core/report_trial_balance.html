@@ -1,0 +1,40 @@
+{% extends 'core/base.html' %}
+{% load humanize %} {% block title %}Trial Balance{% endblock %}
+
+{% block content %}
+    <h2>Trial Balance</h2>
+    <p>This report shows the final closing balance for all ledgers.</p>
+
+    <table style="width: 100%; border-collapse: collapse; margin-top: 1em;">
+        <thead style="background-color: #f4f4f4; text-align: left;">
+            <tr>
+                <th style="border: 1px solid #ccc; padding: 0.5em;">Ledger Name</th>
+                <th style="border: 1px solid #ccc; padding: 0.5em; text-align: right;">Debit</th>
+                <th style="border: 1px solid #ccc; padding: 0.5em; text-align: right;">Credit</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ledger in ledgers %}
+            <tr>
+                <td style="border: 1px solid #ccc; padding: 0.5em;">{{ ledger.name }}</td>
+                <td style="border: 1px solid #ccc; padding: 0.5em; text-align: right;">{{ ledger.debit }}</td>
+                <td style="border: 1px solid #ccc; padding: 0.5em; text-align: right;">{{ ledger.credit }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot style="font-weight: bold; background-color: #f9f9f9;">
+            <tr>
+                <td style="border: 1px solid #ccc; padding: 0.5em;">TOTAL</td>
+                <td style="border: 1px solid #ccc; padding: 0.5em; text-align: right;">{{ total_debit }}</td>
+                <td style="border: 1px solid #ccc; padding: 0.5em; text-align: right;">{{ total_credit }}</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    {% if total_debit == total_credit %}
+        <h3 style="color: green;">Balance: OK</h3>
+    {% else %}
+        <h3 style="color: red;">Balance: FAILED (Unbalanced)</h3>
+    {% endif %}
+
+{% endblock %}

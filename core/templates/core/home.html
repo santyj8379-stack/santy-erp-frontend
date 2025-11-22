@@ -1,0 +1,16 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <h2>Welcome to Your Accounting Importer</h2>
+    <p>This is the main dashboard for your application. From here, you can access the data import tools.</p>
+
+    <hr>
+
+    <h3>Tools</h3>
+    <ul>
+        <li><a href="{% url 'upload_xml' %}">Tally XML Import</a> - For importing Tally-specific XML data.</li>
+        <li><a href="{% url 'upload_excel' %}">Smart Excel Wizard</a> - For importing any CSV or Excel file by mapping columns.</li>
+    </ul>
+{% endblock %}

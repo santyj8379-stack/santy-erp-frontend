@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Voucher: {{ voucher.voucher_number }}</title>
+    <style>
+        /* --- GLOBAL STYLES (Applies to Screen & PDF) --- */
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #212529; /* Bootstrap dark grey */
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Container to center content on screen */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* --- TABLE LAYOUT SYSTEM (The Secret to PDF compatibility) --- */
+        table { width: 100%; border-collapse: collapse; }
+        td { vertical-align: top; padding: 5px; }
+        
+        /* Header Styles */
+        .header-table td { padding-bottom: 20px; border-bottom: 2px solid #dee2e6; }
+        .brand { font-size: 28px; font-weight: bold; color: #0d6efd; /* Bootstrap Blue */ }
+        .voucher-type { font-size: 18px; color: #6c757d; text-transform: uppercase; margin-top: 5px; }
+        .voucher-id { font-size: 20px; font-weight: bold; text-align: right; }
+        .voucher-date { text-align: right; color: #666; }
+
+        /* Data Table (Mimics Bootstrap .table) */
+        .data-table { margin-top: 20px; margin-bottom: 30px; }
+        .data-table th {
+            background-color: #212529; /* Black Header */
+            color: #ffffff;
+            padding: 10px;
+            text-align: left;
+            font-weight: bold;
+        }
+        .data-table td {
+            border-bottom: 1px solid #dee2e6; /* Light grey lines */
+            padding: 10px;
+        }
+        
+        /* Text Utilities */
+        .text-end { text-align: right; }
+        .fw-bold { font-weight: bold; }
+        .small-text { font-size: 11px; color: #6c757d; }
+
+        /* Footer & Custom Fields */
+        .footer-table { margin-top: 20px; }
+        .box {
+            background-color: #f8f9fa; /* Light grey background */
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .signature-line {
+            border-top: 1px solid #000;
+            width: 80%;
+            margin: 50px auto 0 auto;
+            text-align: center;
+            padding-top: 5px;
+        }
+
+        /* --- SCREEN ONLY STYLES (Buttons) --- */
+        .no-print {
+            padding: 10px 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            text-align: right;
+        }
+        .btn {
+            text-decoration: none;
+            padding: 8px 16px;
+            color: white;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-left: 10px;
+            font-size: 13px;
+            display: inline-block;
+        }
+        .btn-back { background-color: #6c757d; float: left; }
+        .btn-pdf { background-color: #dc3545; }
+        .btn-print { background-color: #0d6efd; }
+
+        /* --- PDF SPECIFIC SETTINGS --- */
+        @page {
+            size: A4;
+            margin: 1.5cm; /* Standard document margins */
+            @frame footer_frame {           /* Static Footer */
+                -pdf-frame-content: footer_content;
+                bottom: 0cm;
+                margin-left: 1cm;
+                margin-right: 1cm;
+                height: 1cm;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    {% if not is_pdf %}
+    <div class="container">
+        <div class="no-print">
+            <a href="javascript:history.back()" class="btn btn-back">Back</a>
+            <a href="{% url 'voucher_pdf' voucher.id %}" class="btn btn-pdf">Download PDF</a>
+            <button onclick="window.print()" class="btn btn-print" style="border:none; cursor:pointer;">Print View</button>
+        </div>
+    {% else %}
+    <div style="width: 100%;"> 
+    {% endif %}
+
+        <table class="header-table">
+            <tr>
+                <td width="60%">
+                    <div class="brand">Santy ERP</div>
+                    <div class="voucher-type">{{ voucher.vouchertype.name }}</div>
+                </td>
+                <td width="40%">
+                    <div class="voucher-id"># {{ voucher.voucher_number }}</div>
+                    <div class="voucher-date">Date: {{ voucher.date|date:"d-M-Y" }}</div>
+                </td>
+            </tr>
+        </table>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th width="50%">Particulars</th>
+                    <th width="25%" class="text-end">Debit</th>
+                    <th width="25%" class="text-end">Credit</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in entries %}
+                <tr>
+                    <td>
+                        <span class="fw-bold">{{ entry.ledger.name }}</span>
+                        {% if entry.ledger.parent %}
+                            <br><span class="small-text">({{ entry.ledger.parent.name }})</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-end">
+                        {% if entry.is_debit %}{{ entry.amount|floatformat:2 }}{% endif %}
+                    </td>
+                    <td class="text-end">
+                        {% if not entry.is_debit %}{{ entry.amount|floatformat:2 }}{% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr style="background-color: #eee; font-weight: bold;">
+                    <td class="text-end">TOTAL</td>
+                    <td class="text-end">{{ total_amount|floatformat:2 }}</td>
+                    <td class="text-end">{{ total_amount|floatformat:2 }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="footer-table">
+            <tr>
+                <td width="60%">
+                    <div class="box">
+                        <div style="margin-bottom: 10px;">
+                            <strong>Narration:</strong><br>
+                            <span style="color: #555;">{{ voucher.narration }}</span>
+                        </div>
+
+                        {% if custom_fields %}
+                        <div style="border-top: 1px solid #ddd; padding-top: 10px; margin-top: 10px;">
+                            <strong>Additional Details:</strong>
+                            {% for field in custom_fields %}
+                                <div style="font-size: 12px; margin-top: 4px;">
+                                    <span style="color:#666;">{{ field.field_key }}:</span> 
+                                    <strong>{{ field.field_value }}</strong>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </td>
+                <td width="40%" style="vertical-align: bottom;">
+                    <div class="signature-line">
+                        Authorized Signatory
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+    {% if not is_pdf %}
+    </div> {% else %}
+    </div> {% endif %}
+
+</body>
+</html>

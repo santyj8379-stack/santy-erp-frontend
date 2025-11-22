@@ -1,0 +1,14 @@
+Date,Voucher Type,Voucher No,Ledger Name,Amount,Dr/Cr,Narration,Cheque No,Cost Center,GSTIN,Truck No
+01-Apr-2024,Receipt,REC/24-25/001,HDFC Bank,118000,Dr,Received advance from customer,554433,,27ABCDE1234F1Z5,
+01-Apr-2024,Receipt,REC/24-25/001,Apex Tech Solutions,118000,Cr,Advance against Project Alpha,,,27ABCDE1234F1Z5,
+02-Apr-2024,Sales,SAL/24-25/001,Apex Tech Solutions,118000,Dr,Sales Invoice #001,,,27ABCDE1234F1Z5,
+02-Apr-2024,Sales,SAL/24-25/001,Sales Account,100000,Cr,Software License Fees,,,27ABCDE1234F1Z5,
+02-Apr-2024,Sales,SAL/24-25/001,Output CGST 9%,9000,Cr,CGST on Sales,,,27ABCDE1234F1Z5,
+02-Apr-2024,Sales,SAL/24-25/001,Output SGST 9%,9000,Cr,SGST on Sales,,,27ABCDE1234F1Z5,
+05-Apr-2024,Contra,CNT/24-25/005,Cash Account,10000,Dr,Cash withdrawal for expenses,,,27ABCDE1234F1Z5,
+05-Apr-2024,Contra,CNT/24-25/005,HDFC Bank,10000,Cr,Self withdrawal cheque,000123,,27ABCDE1234F1Z5,
+10-Apr-2024,Payment,PAY/24-25/012,Office Rent,25000,Dr,Rent for April 2024,,Mumbai Branch,,
+10-Apr-2024,Payment,PAY/24-25/012,HDFC Bank,25000,Cr,Paid via NEFT,,Mumbai Branch,,
+15-Apr-2024,Purchase,PUR/24-25/088,Dell Computers,59000,Cr,Purchase of 1 Laptop,,,29XYZ9876G1Z1,MH-12-AB-1234
+15-Apr-2024,Purchase,PUR/24-25/088,Computer Assets,50000,Dr,Fixed Asset purchase,,,29XYZ9876G1Z1,MH-12-AB-1234
+15-Apr-2024,Purchase,PUR/24-25/088,Input IGST 18%,9000,Dr,IGST on Asset,,,29XYZ9876G1Z1,MH-12-AB-1234

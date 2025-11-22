@@ -1,0 +1,7 @@
+Date,VoucherType,VoucherNo,LedgerName,Amount,DrCr
+2025-04-01,Receipt,REC001,Cash Account,50000,Dr
+2025-04-01,Receipt,REC001,Owner Capital,50000,Cr
+2025-04-02,Purchase,PUR001,Purchase Account,10000,Dr
+2025-04-02,Purchase,PUR001,ABC Suppliers,10000,Cr
+2025-04-03,Payment,PAY001,ABC Suppliers,5000,Dr
+2025-04-03,Payment,PAY001,Cash Account,5000,Cr
